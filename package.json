@@ -1,6 +1,6 @@
 {
   "name": "catkinr-blog",
-  "private": true,
+  "private": false,
   "type": "module",
   "version": "1.0.1",
   "description": "Catkinr's personal blog",
