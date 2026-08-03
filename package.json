@@ -1,7 +1,14 @@
 {
-  "name": "firefly",
+  "name": "catkinr-blog",
   "type": "module",
-  "version": "6.15.6",
+  "version": "1.0.0",
+  "description": "Catkinr's personal blog built with Firefly theme",
+  "author": "Catkinr",
+  "homepage": "https://web.catfix.top",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maoxinhe"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -101,3 +108,4 @@
   },
   "packageManager": "pnpm@9.14.4"
 }
+
