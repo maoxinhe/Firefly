@@ -12,7 +12,7 @@ export const siteConfig: SiteConfig = {
 	subtitle: "Demo site",
 
 	// 站点 URL
-	site_url: "web.catfix.top",
+	site_url: "https://web.catfix.top",
 
 	// 站点描述
 	description:
