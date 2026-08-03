@@ -1,13 +1,14 @@
 {
   "name": "catkinr-blog",
+  "private": true,
   "type": "module",
   "version": "1.0.0",
-  "description": "Catkinr's personal blog built with Firefly theme",
+  "description": "Catkinr's personal blog",
   "author": "Catkinr",
   "homepage": "https://web.catfix.top",
   "repository": {
     "type": "git",
-    "url": "https://github.com/maoxinhe"
+    "url": "https://github.com/maoxinhe/maoxinhe.github.io"
   },
   "scripts": {
     "dev": "astro dev",
