@@ -1,6 +1,6 @@
 import type { FriendLink, FriendsPageConfig } from "../types/friendsConfig";
 
-// 可以在src/content/spec/friends.md中编写友链页面下方的自定义内容
+// 可以在 src/content/spec/friends.md 中编写友链页面下方的自定义内容
 
 // 友链页面配置
 export const friendsPageConfig: FriendsPageConfig = {
@@ -13,7 +13,7 @@ export const friendsPageConfig: FriendsPageConfig = {
 	// 是否显示底部自定义内容（friends.mdx 中的内容）
 	showCustomContent: true,
 
-	// 是否显示评论区，需要先在commentConfig.ts启用评论系统
+	// 是否显示评论区，需要先在 commentConfig.ts 启用评论系统
 	showComment: true,
 
 	// 是否开启随机排序配置，如果开启，就会忽略权重，构建时进行一次随机排序
@@ -23,31 +23,21 @@ export const friendsPageConfig: FriendsPageConfig = {
 // 友链配置
 export const friendsConfig: FriendLink[] = [
 	{
-		title: "夏夜流萤",
-		imgurl:
-			"https://weavatar.com/avatar/d252655d40d6874417a720bad0a6c5f77f8f6a1fd2f882f8f338402dc37e4190?s=640",
-		desc: "飞萤之火自无梦的长夜亮起，绽放在终竟的明天。",
-		siteurl: "https://blog.cuteleaf.cn",
-		tags: ["Blog"],
-		weight: 10, // 权重，数字越大排序越靠前
-		enabled: true, // 是否启用
-	},
-	{
-		title: "Firefly Docs",
-		imgurl: "https://docs-firefly.cuteleaf.cn/logo.png",
-		desc: "Firefly主题模板文档",
-		siteurl: "https://docs-firefly.cuteleaf.cn",
-		tags: ["Docs"],
-		weight: 9,
+		title: "哔哩哔哩",
+		imgurl: "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEYcEVqcJjvcI0t-dyHHsggqei2c9qDCwACRjAAApvPgVdWTbSCsroPsD0E.jpg",
+		desc: "我的B站主页",
+		siteurl: "https://space.bilibili.com/1665641970",
+		tags: ["视频"],
+		weight: 10,
 		enabled: true,
 	},
 	{
-		title: "Astro",
-		imgurl: "https://avatars.githubusercontent.com/u/44914786?v=4&s=640",
-		desc: "The web framework for content-driven websites. ⭐️ Star to support our work!",
-		siteurl: "https://github.com/withastro/astro",
-		tags: ["Framework"],
-		weight: 8,
+		title: "GitHub",
+		imgurl: "https://github.com/maoxinhe.png",
+		desc: "我的GitHub主页",
+		siteurl: "https://github.com/maoxinhe",
+		tags: ["代码"],
+		weight: 9,
 		enabled: true,
 	},
 ];
