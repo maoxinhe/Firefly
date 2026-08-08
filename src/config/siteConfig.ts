@@ -43,7 +43,7 @@ export const siteConfig: SiteConfig = {
 	// Favicon
 	favicon: [
 		{
-			src: "/favicon/firefly-32.png",
+			src: "/favicon/favicon-32.png",
 		},
 	],
 
@@ -51,8 +51,8 @@ export const siteConfig: SiteConfig = {
 	navbar: {
 		logo: {
 			type: "image",
-			value: "assets/images/logo/firefly-light.png",
-			valueDark: "assets/images/logo/firefly-dark.png",
+			value: "assets/images/logo/logo-light.png",
+			valueDark: "assets/images/logo/logo-dark.png",
 			alt: "maoxinhe",
 		},
 		title: "maoxinhe",
