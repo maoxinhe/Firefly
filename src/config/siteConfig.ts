@@ -40,10 +40,10 @@ export const siteConfig: SiteConfig = {
 		followTheme: false,
 	},
 
-	// Favicon
+	// Favicon（使用 QQ 头像 API，QQ号：1096550598）
 	favicon: [
 		{
-			src: "/favicon/favicon-32.png",
+			src: "https://q1.qlogo.cn/g?b=qq&nk=1096550598&s=100",
 		},
 	],
 
@@ -51,8 +51,8 @@ export const siteConfig: SiteConfig = {
 	navbar: {
 		logo: {
 			type: "image",
-			value: "assets/images/logo/logo-light.png",
-			valueDark: "assets/images/logo/logo-dark.png",
+			value: "https://q1.qlogo.cn/g?b=qq&nk=1096550598&s=640",
+			valueDark: "https://q1.qlogo.cn/g?b=qq&nk=1096550598&s=640",
 			alt: "maoxinhe",
 		},
 		title: "maoxinhe",
