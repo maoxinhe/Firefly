@@ -11,7 +11,7 @@ export const siteConfig: SiteConfig = {
 	subtitle: "个人知识库 / 技术笔记",
 
 	// 站点 URL（换成你自己的域名）
-	site_url: "https://wiki.catfix.top",
+	site_url: "https://web.catfix.top",
 
 	// 站点描述
 	description: "maoxinhe 的个人博客，记录学习与思考",
