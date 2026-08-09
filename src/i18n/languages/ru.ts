@@ -434,4 +434,18 @@ export const ru: Translation = {
 	[Key.videoPrev]: "Предыдущее видео",
 	[Key.videoNext]: "Следующее видео",
 	[Key.videoLoadError]: "Не удалось загрузить видео",
+
+	// AI анализ статьи
+	[Key.aiAnalysis]: "AI анализ статьи",
+	[Key.aiAnalysisBtn]: "AI анализ",
+	[Key.aiAnalysisLoading]: "AI анализирует...",
+	[Key.aiAnalysisSummary]: "Краткое содержание",
+	[Key.aiAnalysisKeyPoints]: "Ключевые моменты",
+	[Key.aiAnalysisDifficulty]: "Сложность",
+	[Key.aiAnalysisReadingTime]: "Время чтения",
+	[Key.aiAnalysisError]: "Анализ не удался, попробуйте позже",
+	[Key.aiAnalysisNoApiKey]: "AI API Key не настроен, установите в aiConfig.ts",
+	[Key.aiAnalysisRetry]: "Повторить",
+	[Key.aiAnalysisCollapse]: "Свернуть",
+	[Key.aiAnalysisExpand]: "Развернуть",
 };

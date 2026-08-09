@@ -420,6 +420,20 @@ enum I18nKey {
 	videoPrev = "videoPrev",
 	videoNext = "videoNext",
 	videoLoadError = "videoLoadError",
+
+	// AI 文章分析
+	aiAnalysis = "aiAnalysis",
+	aiAnalysisBtn = "aiAnalysisBtn",
+	aiAnalysisLoading = "aiAnalysisLoading",
+	aiAnalysisSummary = "aiAnalysisSummary",
+	aiAnalysisKeyPoints = "aiAnalysisKeyPoints",
+	aiAnalysisDifficulty = "aiAnalysisDifficulty",
+	aiAnalysisReadingTime = "aiAnalysisReadingTime",
+	aiAnalysisError = "aiAnalysisError",
+	aiAnalysisNoApiKey = "aiAnalysisNoApiKey",
+	aiAnalysisRetry = "aiAnalysisRetry",
+	aiAnalysisCollapse = "aiAnalysisCollapse",
+	aiAnalysisExpand = "aiAnalysisExpand",
 }
 
 export default I18nKey;

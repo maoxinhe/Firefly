@@ -432,4 +432,18 @@ export const en: Translation = {
 	[Key.videoPrev]: "Previous video",
 	[Key.videoNext]: "Next video",
 	[Key.videoLoadError]: "Video failed to load",
+
+	// AI Article Analysis
+	[Key.aiAnalysis]: "AI Analysis",
+	[Key.aiAnalysisBtn]: "AI Analyze",
+	[Key.aiAnalysisLoading]: "AI is analyzing...",
+	[Key.aiAnalysisSummary]: "Summary",
+	[Key.aiAnalysisKeyPoints]: "Key Points",
+	[Key.aiAnalysisDifficulty]: "Difficulty",
+	[Key.aiAnalysisReadingTime]: "Est. Reading",
+	[Key.aiAnalysisError]: "Analysis failed, please try again later",
+	[Key.aiAnalysisNoApiKey]: "AI API Key not configured, set it in aiConfig.ts",
+	[Key.aiAnalysisRetry]: "Retry",
+	[Key.aiAnalysisCollapse]: "Collapse",
+	[Key.aiAnalysisExpand]: "Expand",
 };

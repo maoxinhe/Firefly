@@ -19,8 +19,10 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import CoverImage from "@/components/common/CoverImage.astro";
 import PostMetadata from "@/components/layout/PostMeta.astro";
+import PostAIAnalysis from "@/components/misc/PostAIAnalysis.svelte";
 import RecommendedPost from "@/components/misc/RecommendedPost.astro";
 import SharePoster from "@/components/misc/SharePoster.svelte";
+import { aiConfig } from "@/config/aiConfig";
 import { coverImageConfig } from "@/config/coverImageConfig";
 import { licenseConfig } from "@/config/licenseConfig";
 import { profileConfig } from "@/config/profileConfig";
@@ -307,6 +309,16 @@ const relatedPosts = await getRelatedPosts(entry, 5);
             <Content />
           </Markdown>
 
+          {/* AI 文章分析 */}
+          {aiConfig.enable && (
+            <PostAIAnalysis
+              client:load
+              title={entry.data.title}
+              words={remarkPluginFrontmatter.words}
+              minutes={remarkPluginFrontmatter.minutes}
+            />
+          )}
+
           {/* 打赏按钮 & 分享按钮 */}
           {
             (siteConfig.post.sharePoster || (sponsorConfig.showButtonInPost && siteConfig.pages.sponsor)) && (
@@ -396,6 +408,16 @@ const relatedPosts = await getRelatedPosts(entry, 5);
           <Markdown class="mb-6 markdown-content onload-animation">
             <Content />
           </Markdown>
+
+          {/* AI 文章分析 */}
+          {aiConfig.enable && (
+            <PostAIAnalysis
+              client:load
+              title={entry.data.title}
+              words={remarkPluginFrontmatter.words}
+              minutes={remarkPluginFrontmatter.minutes}
+            />
+          )}
 
           {/* 打赏按钮 & 分享按钮 */}
           {

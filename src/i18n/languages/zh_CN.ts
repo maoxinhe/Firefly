@@ -420,4 +420,18 @@ export const zh_CN: Translation = {
 	[Key.videoPrev]: "上一个视频",
 	[Key.videoNext]: "下一个视频",
 	[Key.videoLoadError]: "视频加载失败",
+
+	// AI 文章分析
+	[Key.aiAnalysis]: "AI 文章分析",
+	[Key.aiAnalysisBtn]: "AI 智能分析",
+	[Key.aiAnalysisLoading]: "AI 正在分析中...",
+	[Key.aiAnalysisSummary]: "内容摘要",
+	[Key.aiAnalysisKeyPoints]: "核心要点",
+	[Key.aiAnalysisDifficulty]: "阅读难度",
+	[Key.aiAnalysisReadingTime]: "预计阅读",
+	[Key.aiAnalysisError]: "分析失败，请稍后重试",
+	[Key.aiAnalysisNoApiKey]: "未配置 AI API Key，请在 aiConfig.ts 中设置",
+	[Key.aiAnalysisRetry]: "重新分析",
+	[Key.aiAnalysisCollapse]: "收起分析",
+	[Key.aiAnalysisExpand]: "展开分析",
 };

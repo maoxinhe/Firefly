@@ -430,4 +430,18 @@ export const ja: Translation = {
 	[Key.videoPrev]: "前の動画",
 	[Key.videoNext]: "次の動画",
 	[Key.videoLoadError]: "動画の読み込みに失敗しました",
+
+	// AI 記事分析
+	[Key.aiAnalysis]: "AI 記事分析",
+	[Key.aiAnalysisBtn]: "AI 分析",
+	[Key.aiAnalysisLoading]: "AI が分析中...",
+	[Key.aiAnalysisSummary]: "内容要約",
+	[Key.aiAnalysisKeyPoints]: "核心ポイント",
+	[Key.aiAnalysisDifficulty]: "難易度",
+	[Key.aiAnalysisReadingTime]: "推定読書時間",
+	[Key.aiAnalysisError]: "分析に失敗しました。後でもう一度お試しください",
+	[Key.aiAnalysisNoApiKey]: "AI API Key が未設定です。aiConfig.ts で設定してください",
+	[Key.aiAnalysisRetry]: "再分析",
+	[Key.aiAnalysisCollapse]: "折りたたむ",
+	[Key.aiAnalysisExpand]: "展開する",
 };

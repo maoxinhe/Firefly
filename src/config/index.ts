@@ -4,6 +4,7 @@
 // 类型导出
 export type {
 	AdConfig,
+	AIConfig,
 	AnalyticsConfig,
 	AnnouncementConfig,
 	BackgroundWallpaperConfig,
@@ -41,6 +42,7 @@ export type {
 	FontDefinition,
 	FontSelectionConfig,
 } from "../types/fontConfig"; // 字体类型定义
+export { aiConfig } from "./aiConfig"; // AI 文章分析配置
 export { analyticsConfig } from "./analyticsConfig"; // 统计分析配置
 export { announcementConfig } from "./announcementConfig"; // 公告配置
 // 样式配置

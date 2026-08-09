@@ -1,3 +1,4 @@
+export type { AIConfig } from "./aiConfig";
 export type { AnalyticsConfig } from "./analyticsConfig";
 export type { AnnouncementConfig } from "./announcementConfig";
 export type { BackgroundWallpaperConfig } from "./backgroundWallpaper";

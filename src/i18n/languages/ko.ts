@@ -429,4 +429,18 @@ export const ko: Translation = {
 	[Key.videoPrev]: "이전 영상",
 	[Key.videoNext]: "다음 영상",
 	[Key.videoLoadError]: "영상을 불러오지 못했습니다",
+
+	// AI 기사 분석
+	[Key.aiAnalysis]: "AI 기사 분석",
+	[Key.aiAnalysisBtn]: "AI 분석",
+	[Key.aiAnalysisLoading]: "AI가 분석 중...",
+	[Key.aiAnalysisSummary]: "요약",
+	[Key.aiAnalysisKeyPoints]: "핵심 포인트",
+	[Key.aiAnalysisDifficulty]: "난이도",
+	[Key.aiAnalysisReadingTime]: "예상 읽기 시간",
+	[Key.aiAnalysisError]: "분석 실패, 나중에 다시 시도해 주세요",
+	[Key.aiAnalysisNoApiKey]: "AI API Key가 설정되지 않았습니다. aiConfig.ts에서 설정하세요",
+	[Key.aiAnalysisRetry]: "재시도",
+	[Key.aiAnalysisCollapse]: "접기",
+	[Key.aiAnalysisExpand]: "펼치기",
 };
