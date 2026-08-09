@@ -2,6 +2,7 @@
 import Icon from "@/components/common/Icon.svelte";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
+import { aiConfig } from "@/config/aiConfig";
 
 interface Props {
 	title: string;
@@ -58,6 +59,12 @@ function extractArticleText(): string {
 async function analyze() {
 	if (status === "loading") return;
 
+	if (!aiConfig.apiKey) {
+		status = "error";
+		errorMsg = "API Key not configured";
+		return;
+	}
+
 	status = "loading";
 	errorMsg = "";
 	result = null;
@@ -65,33 +72,75 @@ async function analyze() {
 	try {
 		const content = extractArticleText();
 
-		const response = await fetch("/api/ai-analysis", {
+		// 截取前 4000 字符，避免超出 token 限制
+		const truncatedContent = content.slice(0, 4000);
+
+		const prompt = `你是一个专业的文章分析助手。请分析以下文章，并返回 JSON 格式的分析结果。
+
+文章标题：${title}
+文章字数：${words}
+系统估算阅读时间：${minutes} 分钟
+
+文章内容：
+${truncatedContent}
+
+请严格按照以下 JSON 格式返回结果（不要包含 markdown 代码块标记，直接返回纯 JSON）：
+{
+  "summary": "用 2-3 句话概括文章的核心内容",
+  "keyPoints": ["要点1", "要点2", "要点3"],
+  "difficulty": "简单/中等/较难（根据文章技术深度和内容复杂度判断）",
+  "readingTime": 根据文章难度和长度推算的实际阅读时间（整数分钟）
+}`;
+
+		const response = await fetch(aiConfig.apiUrl, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${aiConfig.apiKey}`,
+			},
 			body: JSON.stringify({
-				title,
-				content,
-				words,
-				minutes,
+				model: aiConfig.model,
+				messages: [
+					{
+						role: "user",
+						content: prompt,
+					},
+				],
+				temperature: 0.3,
+				stream: false,
 			}),
 		});
 
 		if (!response.ok) {
-			const errData = await response.json().catch(() => ({}));
-			throw new Error(errData.error || `HTTP ${response.status}`);
+			throw new Error(`AI API error: ${response.status}`);
 		}
 
 		const data = await response.json();
+		const aiContent: string =
+			data?.choices?.[0]?.message?.content || "";
+
+		// 解析 AI 返回的 JSON（去除可能的 markdown 代码块标记）
+		let jsonStr = aiContent.trim();
+		jsonStr = jsonStr
+			.replace(/^```(?:json)?\s*/i, "")
+			.replace(/\s*```$/i, "");
+
+		// 尝试提取 JSON 部分
+		const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
+		if (jsonMatch) {
+			jsonStr = jsonMatch[0];
+		}
+
+		const parsed = JSON.parse(jsonStr);
 		result = {
-			summary: data.summary || "",
-			keyPoints: Array.isArray(data.keyPoints) ? data.keyPoints : [],
-			difficulty: data.difficulty || "未知",
-			readingTime: data.readingTime || minutes,
+			summary: parsed.summary || "",
+			keyPoints: Array.isArray(parsed.keyPoints) ? parsed.keyPoints : [],
+			difficulty: parsed.difficulty || "未知",
+			readingTime: parsed.readingTime || minutes,
 		};
 		status = "success";
 	} catch (err) {
-		errorMsg =
-			err instanceof Error ? err.message : "Unknown error";
+		errorMsg = err instanceof Error ? err.message : "Unknown error";
 		status = "error";
 	}
 }
