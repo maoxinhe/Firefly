@@ -1,0 +1,179 @@
+{
+	"code-examples": {
+		"summary": "本文介绍了如何使用Expressive Code展示代码块，包括语法高亮、文本和行标记、自动换行、可折叠部分、行号等特性，并提供了基本用法示例。",
+		"keyPoints": [
+			"Expressive Code支持语法高亮、文本和行标记、自动换行、可折叠部分、行号等特性。",
+			"可以使用代码块标签页合并多个代码块，并支持Emoji标签。",
+			"标签页内可以放置任意内容，如文字、列表或图片。",
+			"标签栏在构建期生成，支持鼠标点击与键盘操作切换。",
+			"Expressive Code的代码块特性可以与其他特性组合使用。"
+		],
+		"difficulty": "简单",
+		"readingTime": 3,
+		"updated": "2026-11-07"
+	},
+	"guide/maoxinhe-layout-system": {
+		"summary": "本文详细介绍了maoxinhe布局系统的功能，包括侧边栏布局和文章列表布局，以及它们如何共同决定页面整体结构，并探讨了不同布局模式的特点、使用场景和组合效果。",
+		"keyPoints": [
+			"maoxinhe布局系统允许自定义博客视觉呈现方式",
+			"布局系统包括侧边栏布局和文章列表布局两个维度",
+			"不同布局模式具有各自的特点和使用场景",
+			"布局组合可以产生不同的页面效果"
+		],
+		"difficulty": "简单",
+		"readingTime": 2,
+		"updated": "2026-11-07"
+	},
+	"guide/maoxinhe-wiki-link": {
+		"summary": "本文介绍了maoxinhe Wiki Link在Markdown、MDX文章中的使用方法，包括链接目标的三种写法、自定义显示标题、链接到其他文章标题和本页标题，以及不支持附件嵌入和行内代码的情况。",
+		"keyPoints": [
+			"maoxinhe Wiki Link支持使用Obsidian风格的Wiki Link内部链接",
+			"链接目标可以填写文章的slug或文件路径，无需包含扩展名",
+			"链接目标的三种写法包括slug、文件路径和裸文件名",
+			"可以自定义链接显示标题，但若重复则被视为无效别名",
+			"支持链接到其他文章标题和本页标题，但不支持附件嵌入和行内代码"
+		],
+		"difficulty": "简单",
+		"readingTime": 5,
+		"updated": "2026-11-07"
+	},
+	"guide/index": {
+		"summary": "本文详细介绍了基于 Astro 构建的 maoxinhe 博客模板的使用方法，包括 Front-matter 属性、文章文件放置位置、自定义文章 URL (Slug) 的设置和注意事项。",
+		"keyPoints": [
+			"maoxinhe 博客模板基于 Astro 构建，具有丰富的 Front-matter 属性，如 title、published、tags 等。",
+			"文章文件应放置在 src/content/posts/ 目录中，可创建子目录以组织文章和资源。",
+			"自定义文章 URL (Slug) 可通过设置文件名或直接指定，建议使用英文和连字符，保持简洁和描述性。",
+			"Slug 一旦设置并发布，建议不要随意更改，以免影响 SEO 和已存在的链接。"
+		],
+		"difficulty": "简单",
+		"readingTime": 5,
+		"updated": "2026-11-07"
+	},
+	"katex-math-example": {
+		"summary": "本文通过示例展示了博客对 KaTeX 数学公式的渲染支持，包括行内公式、块级公式、矩阵、极限与求和、麦克斯韦方程组和化学方程式等。",
+		"keyPoints": [
+			"行内公式使用单个 $ 符号包裹，块级公式使用两个 $$ 符号包裹并居中显示。",
+			"矩阵、极限与求和、麦克斯韦方程组和化学方程式等复杂数学公式可通过 KaTeX 渲染。",
+			"KaTeX 支持多种数学符号，如 Alpha、Beta、Gamma、Pi、Infinity 等。",
+			"更多 KaTeX 语法和功能可参考 KaTeX Supported Functions。"
+		],
+		"difficulty": "简单",
+		"readingTime": 3,
+		"updated": "2026-11-07"
+	},
+	"markdown-extended": {
+		"summary": "本文介绍了Markdown扩展功能，包括GitHub仓库卡片、提醒框配置、剧透、图片画廊网格等，并详细说明了每种功能的语法和配置方法。",
+		"keyPoints": [
+			"Markdown支持添加GitHub仓库卡片，通过GitHub API获取仓库信息。",
+			"Markdown支持四种风格的提醒框主题，包括GitHub、Obsidian、VitePress和Docusaurus。",
+			"Markdown支持添加剧透，文本支持Markdown语法。",
+			"Markdown支持图片画廊网格，可纵向并排展示多张图片，并自动调整图片大小和布局。",
+			"Markdown支持图片边框水平对齐和图注恒定底端对齐。"
+		],
+		"difficulty": "简单",
+		"readingTime": 3,
+		"updated": "2026-11-07"
+	},
+	"markdown-mermaid": {
+		"summary": "本文详细介绍了如何在Markdown文档中使用Mermaid创建各种图表，包括流程图、时序图、ER图等，并提供了相应的示例和语法说明。",
+		"keyPoints": [
+			"Mermaid图表由Merman实现，支持多种图表类型，如流程图、时序图、ER图等。",
+			"使用Mermaid图表可以更清晰地表达复杂的概念、流程和数据结构。",
+			"在Markdown文档中，只需在代码块中指定mermaid语言，并使用简洁的文本语法描述图表。",
+			"图表会在构建时自动渲染为SVG，无需客户端JavaScript加载。"
+		],
+		"difficulty": "简单",
+		"readingTime": 5,
+		"updated": "2026-11-07"
+	},
+	"markdown-plantuml": {
+		"summary": "本文介绍了PlantUML图表在Markdown中的使用方法，包括其特点、适用场景和示例模板。",
+		"keyPoints": [
+			"PlantUML是一种使用纯文本描述图表的工具，可生成多种工程图。",
+			"PlantUML图表适合写在技术博客和项目文档中，便于版本管理和协作。",
+			"PlantUML图表可以与Markdown无缝结合，保持文档统一。",
+			"PlantUML图表支持缩放、拖拽和全屏交互。",
+			"本文提供了多种图表的示例模板，帮助读者快速上手。"
+		],
+		"difficulty": "简单",
+		"readingTime": 3,
+		"updated": "2026-11-07"
+	},
+	"markdown-tutorial": {
+		"summary": "本文详细介绍了Markdown的基本语法和常见扩展，包括段落、换行、标题、引用、列表、代码块、分割线、表格、链接、强调、行内代码、图片、删除线、自动链接、反斜杠转义、内联HTML和块级元素等。",
+		"keyPoints": [
+			"Markdown支持多种块级元素，如段落、标题、引用、列表、代码块、分割线和表格。",
+			"Markdown支持多种内联元素，如链接、强调、行内代码、图片和删除线。",
+			"Markdown支持自动链接和反斜杠转义功能。",
+			"Markdown支持内联HTML和块级元素。",
+			"Markdown支持语法高亮和围栏代码块功能。"
+		],
+		"difficulty": "简单",
+		"readingTime": 20,
+		"updated": "2026-11-07"
+	},
+	"mdx-example": {
+		"summary": "本文介绍了Markdown和MDX格式的区别，包括基础语法、HTML标签支持、动态数据、样式定制、组件导入等方面的差异。",
+		"keyPoints": [
+			"Markdown是一种轻量级标记语言，适合编写文档和博客文章；MDX是Markdown的扩展，允许在文档中嵌入React组件，实现更丰富的交互性和动态性。",
+			"MDX支持CommonMark基础语法、HTML标签、JSX组件导入和JS表达式，而Markdown不支持JSX组件导入和JS表达式。",
+			"MDX在样式定制方面比Markdown更灵活，支持CSS-in-JS。",
+			"MDX支持直接使用HTML/JSX，而Markdown不支持。",
+			"MDX可以导出简单的变量，如年份。"
+		],
+		"difficulty": "简单",
+		"readingTime": 3,
+		"updated": "2026-11-07"
+	},
+	"video": {
+		"summary": "本文介绍了如何在markdown文件中嵌入YouTube或Bilibili等平台的视频，只需复制嵌入代码并粘贴到文件中即可。",
+		"keyPoints": [
+			"在markdown文件中嵌入视频，只需复制YouTube或Bilibili等平台的嵌入代码并粘贴到文件中。",
+			"嵌入视频时，不需要使用markdown代码块。",
+			"支持多种视频平台，如YouTube和Bilibili。",
+			"操作简单，适合初学者。"
+		],
+		"difficulty": "简单",
+		"readingTime": 1,
+		"updated": "2026-11-07"
+	},
+	"home-cloud-ai-dev-agent-architecture": {
+		"summary": "本文详细介绍了家里云AI Dev Agent平台的架构设计，包括多用户AI Dev Agent平台架构设计，涉及Cloudflare边缘层、Serv00备线、NewAPI模型网关等组件。",
+		"keyPoints": [
+			"家里云AI Dev Agent平台采用家机纯算力、CF边缘控制面、Serv00备线、NewAPI模型网关等架构设计。",
+			"平台架构包括Cloudflare边缘层、数据层、任务队列、内网穿透、访问控制、授权站、监控等模块。",
+			"平台采用多Key轮转、配额控制、Fallback策略等机制保证稳定性和安全性。",
+			"平台演进路线包括链路验证、多用户+配额、体验打磨、规模化、商业化等阶段。",
+			"成本预期为30-100元/月，可支持10-50用户内测。"
+		],
+		"difficulty": "中等",
+		"readingTime": 10,
+		"updated": "2026-11-07"
+	},
+	"权力与使命": {
+		"summary": "本文通过数学模型和流程图，深度解析了电视剧《人民的名义》中的人物关系和权力博弈，揭示了欲望、阶层与规则之间的复杂关系，并探讨了贪官行为背后的心理动机。",
+		"keyPoints": [
+			"《人民的名义》中的人物关系网下运行着一套近乎完美的权力算法。",
+			"通过三张核心流程图，分析了祁同伟、高育良、赵瑞龙等人物的行为逻辑。",
+			"用囚徒困境变体解释了贪官为何难以停止贪腐行为。",
+			"引入大数据反腐系统可以更有效地打击腐败。",
+			"《人民的名义》展现了人性的算法，揭示了社会的运行规则。"
+		],
+		"difficulty": "中等",
+		"readingTime": 5,
+		"updated": "2026-11-07"
+	},
+	"空城计": {
+		"summary": "本文详细解析了恒大集团及其创始人许家印通过财务造假手段虚增收入和利润，最终导致公司破产和投资者损失的全过程。",
+		"keyPoints": [
+			"恒大集团通过提前确认收入等手段虚增收入和利润，两年内虚增收入5641亿，相当于凭空变出一个中型房企的全年销售额。",
+			"恒大集团的虚假财报导致其在交易所市场公开发行了5期合计208亿元债券，存在欺诈发行。",
+			"恒大集团的债务窟窿高达2.44万亿，导致大量理财产品和楼盘烂尾，给投资者带来巨大损失。",
+			"证监会和财政部对恒大审计机构普华永道进行处罚，并禁止其承接新上市公司客户6个月。",
+			"许家印在深圳中院当庭认罪，法庭将择期宣判。"
+		],
+		"difficulty": "中等",
+		"readingTime": 5,
+		"updated": "2026-11-07"
+	}
+}

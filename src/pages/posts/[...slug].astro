@@ -22,6 +22,7 @@ import PostMetadata from "@/components/layout/PostMeta.astro";
 import PostAIAnalysis from "@/components/misc/PostAIAnalysis.svelte";
 import RecommendedPost from "@/components/misc/RecommendedPost.astro";
 import SharePoster from "@/components/misc/SharePoster.svelte";
+import aiAnalysisData from "@/data/ai-analysis.json";
 import { aiConfig } from "@/config/aiConfig";
 import { coverImageConfig } from "@/config/coverImageConfig";
 import { licenseConfig } from "@/config/licenseConfig";
@@ -48,6 +49,18 @@ const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 
 const { remarkPluginFrontmatter } = await render(entry);
+
+// 构建期预生成的文章 AI 分析（无需运行时调用第三方接口）
+const aiTable = aiAnalysisData as Record<string, any>;
+const aiKeys = [
+	entry.id.replace(/\.(md|mdx)$/, ""),
+	entry.id,
+	(entry as any).slug,
+	entry.data.slug,
+].filter(Boolean) as string[];
+const aiAnalysis = aiConfig.enable
+	? aiKeys.map((k) => aiTable[k]).find(Boolean) ?? null
+	: null;
 
 const bannerPostMeta = {
 	title: entry.data.title,
@@ -316,6 +329,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
               title={entry.data.title}
               words={remarkPluginFrontmatter.words}
               minutes={remarkPluginFrontmatter.minutes}
+              analysis={aiAnalysis}
             />
           )}
 
@@ -416,6 +430,7 @@ const relatedPosts = await getRelatedPosts(entry, 5);
               title={entry.data.title}
               words={remarkPluginFrontmatter.words}
               minutes={remarkPluginFrontmatter.minutes}
+              analysis={aiAnalysis}
             />
           )}
 
