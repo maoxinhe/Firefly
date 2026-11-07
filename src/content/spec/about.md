@@ -21,7 +21,7 @@ published: 2026-08-03
 
 ## 🔗 相关链接
 
-- 🌐 博客主页：[https://web.catfix.top](https://web.catfix.top)
+- 🌐 博客主页：[https://blod.camzy.tech](https://blod.camzy.tech)
 - 💻 GitHub：[https://github.com/maoxinhe](https://github.com/maoxinhe)
 - 📺 B站：[https://space.bilibili.com/1665641970](https://space.bilibili.com/1665641970)
 

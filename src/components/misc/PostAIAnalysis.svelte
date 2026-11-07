@@ -3,6 +3,7 @@ import Icon from "@/components/common/Icon.svelte";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import { aiConfig } from "@/config/aiConfig";
+import { onMount } from "svelte";
 
 interface Props {
 	title: string;
@@ -37,61 +38,94 @@ const difficultyColors: Record<string, string> = {
 	"简单": "text-green-500",
 	"中等": "text-yellow-500",
 	"较难": "text-red-500",
-	"Simple": "text-green-500",
-	"Medium": "text-yellow-500",
-	"Hard": "text-red-500",
+	Simple: "text-green-500",
+	Medium: "text-yellow-500",
+	Hard: "text-red-500",
 };
+
+const CACHE_PREFIX = "ai-analysis:v2:";
+const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 天
+const REQUEST_TIMEOUT = 45_000;
 
 function getDifficultyColor(d: string): string {
 	return difficultyColors[d] || "text-(--primary)";
 }
 
+function cacheKey(): string {
+	if (typeof window === "undefined") return CACHE_PREFIX + title;
+	return CACHE_PREFIX + decodeURIComponent(window.location.pathname);
+}
+
+function readCache(): AnalysisResult | null {
+	if (typeof localStorage === "undefined") return null;
+	try {
+		const raw = localStorage.getItem(cacheKey());
+		if (!raw) return null;
+		const parsed = JSON.parse(raw) as { t: number; d: AnalysisResult };
+		if (!parsed?.d || Date.now() - parsed.t > CACHE_TTL) {
+			localStorage.removeItem(cacheKey());
+			return null;
+		}
+		return parsed.d;
+	} catch {
+		return null;
+	}
+}
+
+function writeCache(data: AnalysisResult) {
+	if (typeof localStorage === "undefined") return;
+	try {
+		localStorage.setItem(
+			cacheKey(),
+			JSON.stringify({ t: Date.now(), d: data }),
+		);
+	} catch {
+		/* 忽略配额异常 */
+	}
+}
+
 function extractArticleText(): string {
 	const el = document.querySelector(contentSelector);
 	if (!el) return "";
-	// 提取纯文本，保留段落换行
 	const clone = el.cloneNode(true) as HTMLElement;
-	// 移除代码块内容（太长且无阅读价值）
-	clone.querySelectorAll("pre").forEach((pre) => pre.remove());
-	return clone.textContent?.trim() || "";
+	// 移除代码块、图片说明、脚注等对分析无意义的内容
+	clone
+		.querySelectorAll("pre, script, style, .expressive-code, figcaption, noscript")
+		.forEach((node) => node.remove());
+	return clone.textContent?.replace(/\s+/g, " ").trim() || "";
 }
 
-async function analyze() {
-	if (status === "loading") return;
+function buildPrompt(content: string): string {
+	return `你是一位资深的技术编辑，擅长为读者提炼文章价值。请通读下面这篇文章并完成分析。
 
-	if (!aiConfig.apiKey) {
-		status = "error";
-		errorMsg = "API Key not configured";
-		return;
-	}
-
-	status = "loading";
-	errorMsg = "";
-	result = null;
-
-	try {
-		const content = extractArticleText();
-
-		// 截取前 4000 字符，避免超出 token 限制
-		const truncatedContent = content.slice(0, 4000);
-
-		const prompt = `你是一个专业的文章分析助手。请分析以下文章，并返回 JSON 格式的分析结果。
+写作要求：
+1. 摘要必须具体，点出文章真正讲了什么（用了哪些方法/结论），禁止"本文介绍了……"这类空泛套话，2-3 句话，不超过 120 字。
+2. 核心要点 3-5 条，每条是一句完整、可独立理解的结论或知识点，不要罗列章节标题。
+3. 难度按读者的实际门槛判断：简单 / 中等 / 较难。
+4. 阅读时间按文章信息密度估算，返回整数分钟。
+5. 全部使用简体中文。
 
 文章标题：${title}
 文章字数：${words}
 系统估算阅读时间：${minutes} 分钟
 
 文章内容：
-${truncatedContent}
+${content}
 
-请严格按照以下 JSON 格式返回结果（不要包含 markdown 代码块标记，直接返回纯 JSON）：
+只返回纯 JSON（不要 markdown 代码块），格式：
 {
-  "summary": "用 2-3 句话概括文章的核心内容",
-  "keyPoints": ["要点1", "要点2", "要点3"],
-  "difficulty": "简单/中等/较难（根据文章技术深度和内容复杂度判断）",
-  "readingTime": 根据文章难度和长度推算的实际阅读时间（整数分钟）
+  "summary": "……",
+  "keyPoints": ["……", "……", "……"],
+  "difficulty": "简单/中等/较难",
+  "readingTime": 整数
 }`;
+}
 
+async function requestAnalysis(content: string): Promise<AnalysisResult> {
+	const controller = new AbortController();
+	const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+
+	try {
 		const response = await fetch(aiConfig.apiUrl, {
 			method: "POST",
 			headers: {
@@ -100,15 +134,11 @@ ${truncatedContent}
 			},
 			body: JSON.stringify({
 				model: aiConfig.model,
-				messages: [
-					{
-						role: "user",
-						content: prompt,
-					},
-				],
-				temperature: 0.3,
+				messages: [{ role: "user", content: buildPrompt(content) }],
+				temperature: 0.2,
 				stream: false,
 			}),
+			signal: controller.signal,
 		});
 
 		if (!response.ok) {
@@ -116,34 +146,106 @@ ${truncatedContent}
 		}
 
 		const data = await response.json();
-		const aiContent: string =
-			data?.choices?.[0]?.message?.content || "";
+		const aiContent: string = data?.choices?.[0]?.message?.content || "";
 
-		// 解析 AI 返回的 JSON（去除可能的 markdown 代码块标记）
 		let jsonStr = aiContent.trim();
 		jsonStr = jsonStr
 			.replace(/^```(?:json)?\s*/i, "")
 			.replace(/\s*```$/i, "");
-
-		// 尝试提取 JSON 部分
 		const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
-		if (jsonMatch) {
-			jsonStr = jsonMatch[0];
+		if (jsonMatch) jsonStr = jsonMatch[0];
+
+		let parsed: Partial<AnalysisResult>;
+		try {
+			parsed = JSON.parse(jsonStr);
+		} catch {
+			// 模型没按 JSON 返回时降级：把纯文本当作摘要
+			parsed = { summary: aiContent.trim().slice(0, 200) };
 		}
 
-		const parsed = JSON.parse(jsonStr);
-		result = {
+		return {
 			summary: parsed.summary || "",
-			keyPoints: Array.isArray(parsed.keyPoints) ? parsed.keyPoints : [],
+			keyPoints: Array.isArray(parsed.keyPoints)
+				? parsed.keyPoints.filter(Boolean).map(String)
+				: [],
 			difficulty: parsed.difficulty || "未知",
-			readingTime: parsed.readingTime || minutes,
+			readingTime: Number(parsed.readingTime) || minutes,
 		};
+	} finally {
+		clearTimeout(timer);
+	}
+}
+
+async function analyze(force = false) {
+	if (status === "loading") return;
+
+	if (!aiConfig.enable) return;
+
+	if (!aiConfig.apiKey) {
+		status = "error";
+		errorMsg = "API Key not configured";
+		return;
+	}
+
+	if (force) {
+		try {
+			localStorage.removeItem(cacheKey());
+		} catch {
+			/* ignore */
+		}
+	}
+
+	status = "loading";
+	errorMsg = "";
+	result = null;
+
+	try {
+		const content = extractArticleText();
+		if (content.length < 50) {
+			throw new Error("empty-content");
+		}
+
+		let lastError: unknown = null;
+		for (let attempt = 0; attempt < 2; attempt++) {
+			try {
+				result = await requestAnalysis(content.slice(0, 6000));
+				lastError = null;
+				break;
+			} catch (err) {
+				lastError = err;
+				// 首次失败后短暂退避再重试一次
+				if (attempt === 0) {
+					await new Promise((r) => setTimeout(r, 1200));
+				}
+			}
+		}
+
+		if (lastError) throw lastError;
+
 		status = "success";
+		collapsed = false; // 出结果自动展开
+		if (result) writeCache(result);
 	} catch (err) {
-		errorMsg = err instanceof Error ? err.message : "Unknown error";
+		const msg = err instanceof Error ? err.message : "Unknown error";
+		errorMsg = msg === "empty-content" ? "" : msg;
 		status = "error";
 	}
 }
+
+// 打开文章即自动分析（命中缓存则直接展示，不再请求）
+onMount(() => {
+	const cached = readCache();
+	if (cached) {
+		result = cached;
+		status = "success";
+		collapsed = false;
+		return;
+	}
+	// 等正文渲染完成后再取文本
+	const start = () => setTimeout(() => void analyze(), 0);
+	if (document.readyState === "complete") start();
+	else window.addEventListener("load", start, { once: true });
+});
 
 function toggleCollapse() {
 	collapsed = !collapsed;
@@ -176,45 +278,51 @@ function toggleCollapse() {
 		</div>
 	</div>
 
-	<!-- 未分析状态：显示按钮 -->
-	{#if status === "idle"}
-		<button
-			class="w-full py-2.5 rounded-lg bg-(--primary)/10 hover:bg-(--primary)/20 text-(--primary) font-medium text-sm transition flex items-center justify-center gap-2"
-			onclick={analyze}
-		>
-			<Icon icon="material-symbols:psychology-outline" class="text-lg" />
-			{i18n(I18nKey.aiAnalysisBtn)}
-		</button>
-	{/if}
-
 	<!-- 加载状态 -->
 	{#if status === "loading"}
-		<div class="flex items-center justify-center py-4 gap-2 text-black/50 dark:text-white/50">
-			<Icon icon="material-symbols:progress-activity" class="text-xl animate-spin" />
-			<span class="text-sm">{i18n(I18nKey.aiAnalysisLoading)}</span>
+		<div class="space-y-2.5 py-2" aria-live="polite">
+			<div class="flex items-center gap-2 text-xs text-black/40 dark:text-white/40">
+				<Icon icon="material-symbols:progress-activity" class="text-base animate-spin" />
+				<span>{i18n(I18nKey.aiAnalysisLoading)}</span>
+			</div>
+			<div class="h-3 rounded-full bg-(--primary)/10 animate-pulse"></div>
+			<div class="h-3 w-5/6 rounded-full bg-(--primary)/10 animate-pulse"></div>
+			<div class="h-3 w-4/6 rounded-full bg-(--primary)/10 animate-pulse"></div>
 		</div>
 	{/if}
 
 	<!-- 错误状态 -->
 	{#if status === "error"}
 		<div class="text-center py-3">
-			<p class="text-sm text-red-500 mb-2">{i18n(I18nKey.aiAnalysisError)}</p>
+			{#if errorMsg}
+				<p class="text-sm text-red-500 mb-2">{i18n(I18nKey.aiAnalysisError)}</p>
+			{:else}
+				<p class="text-sm text-black/40 dark:text-white/40 mb-2">正文过短，暂不生成分析</p>
+			{/if}
 			{#if errorMsg.includes("not configured") || errorMsg.includes("API Key")}
 				<p class="text-xs text-black/40 dark:text-white/40 mb-2">{i18n(I18nKey.aiAnalysisNoApiKey)}</p>
 			{/if}
 			<button
 				class="px-4 py-1.5 rounded-lg bg-(--primary)/10 hover:bg-(--primary)/20 text-(--primary) text-sm font-medium transition"
-				onclick={analyze}
+				onclick={() => analyze(true)}
 			>
 				{i18n(I18nKey.aiAnalysisRetry)}
 			</button>
 		</div>
 	{/if}
 
-	<!-- 成功状态：显示分析结果 -->
+	<!-- 成功状态：显示分析结果（默认展开） -->
 	{#if status === "success" && result}
-		<!-- 折叠/展开切换 -->
-		<div class="flex justify-end mb-2">
+		<!-- 折叠/展开切换 + 重新分析 -->
+		<div class="flex items-center justify-between mb-2">
+			<button
+				class="text-xs text-black/30 dark:text-white/30 hover:text-(--primary) transition flex items-center gap-1"
+				onclick={() => analyze(true)}
+				title="重新分析"
+			>
+				<Icon icon="material-symbols:refresh-rounded" class="text-sm" />
+				<span>重新分析</span>
+			</button>
 			<button
 				class="text-xs text-black/40 dark:text-white/40 hover:text-(--primary) transition flex items-center gap-1"
 				onclick={toggleCollapse}
@@ -228,7 +336,7 @@ function toggleCollapse() {
 		</div>
 
 		{#if !collapsed}
-			<div class="space-y-3">
+			<div class="space-y-3 ai-analysis-body">
 				<!-- 摘要 -->
 				{#if result.summary}
 					<div>
@@ -273,13 +381,41 @@ function toggleCollapse() {
 						<span class="text-(--primary) font-medium">{result.readingTime} {i18n(I18nKey.minutesCount)}</span>
 					</div>
 				</div>
+
+				<p class="text-[11px] text-black/25 dark:text-white/25 pt-1">内容由 AI 生成，仅供参考</p>
 			</div>
 		{/if}
+	{/if}
+
+	<!-- 兜底：极少数情况下未自动触发时保留手动入口 -->
+	{#if status === "idle"}
+		<button
+			class="w-full py-2.5 rounded-lg bg-(--primary)/10 hover:bg-(--primary)/20 text-(--primary) font-medium text-sm transition flex items-center justify-center gap-2"
+			onclick={() => analyze()}
+		>
+			<Icon icon="material-symbols:psychology-outline" class="text-lg" />
+			{i18n(I18nKey.aiAnalysisBtn)}
+		</button>
 	{/if}
 </div>
 
 <style>
 .ai-analysis-card {
 	transition: all 0.3s ease;
+}
+
+.ai-analysis-body {
+	animation: ai-analysis-fade 0.35s ease;
+}
+
+@keyframes ai-analysis-fade {
+	from {
+		opacity: 0;
+		transform: translateY(4px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 </style>
